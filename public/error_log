@@ -1,0 +1,2 @@
+[10-Sep-2026 15:20:18 Asia/Jakarta] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 1310720 bytes) in /home/fajd7295/public_html/vendor/dompdf/php-font-lib/src/FontLib/Table/Type/cmap.php on line 197
+[03-Oct-2026 12:10:24 Asia/Jakarta] PHP Fatal error:  Allowed memory size of 134217728 bytes exhausted (tried to allocate 1310720 bytes) in /home/fajd7295/public_html/vendor/dompdf/php-font-lib/src/FontLib/Table/Type/cmap.php on line 227
