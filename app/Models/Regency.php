@@ -54,8 +54,14 @@ class Regency extends Model
     {
         return $this->hasMany(District::class);
     }
-    public function user()
+
+    /**
+     * Regency has many pendaftarans.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pendaftarans(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->belongsTo(User::class);
+        return $this->hasMany(Pendaftaran::class);
     }
 }

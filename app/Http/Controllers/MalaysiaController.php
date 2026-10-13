@@ -20,10 +20,31 @@ class MalaysiaController extends Controller
             return response()->json(['error' => 'Format ID tidak valid.'], 400);
         }
 
-        // Dapatkan data Marketing beserta relasi sales
-        $marketing = Marketing::with('sales')->find($id);
+        // Dapatkan data Marketing beserta relasi sales dan pendaftaran
+        $marketing = Marketing::with(['sales', 'pendaftaran'])->find($id);
         if (!$marketing) {
             return response()->json(['error' => 'Data marketing tidak ditemukan.'], 404);
+        }
+
+        // Validasi Otorisasi (Mencegah IDOR)
+        $user = auth()->user();
+        if (!$user) {
+            abort(401, 'Silakan login terlebih dahulu.');
+        }
+
+        $canAccess = false;
+        if ($user->is_admin || (method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['super_admin', 'admin']))) {
+            $canAccess = true;
+        } elseif ($user->is_agency) {
+            if ($marketing->agency_id == 2 || (isset($user->agency_id) && $marketing->agency_id == $user->agency_id)) {
+                $canAccess = true;
+            }
+        } elseif ($marketing->pendaftaran && $marketing->pendaftaran->user_id === $user->id) {
+            $canAccess = true;
+        }
+
+        if (!$canAccess) {
+            abort(403, 'Anda tidak memiliki hak akses untuk mengunduh biodata ini.');
         }
 
         // Dapatkan data Pendaftaran dan Kantor terkait jika tersedia
@@ -43,15 +64,17 @@ class MalaysiaController extends Controller
             'sales' => $marketing->sales,
         ])->render();
 
-        // Tentukan nama file dengan timestamp dan nama perusahaan
+        // Tentukan nama file yang aman dengan timestamp dan nama perusahaan
         $timestamp = now()->format('Ymd_His');
         $appName = env('COMPANY_NAME', 'DefaultApp');
-        $filename = $marketing->code_my . '_' . $appName . '_MY_' . $timestamp . '.pdf';
+        $safeCode = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $marketing->code_my);
+        $safeApp = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $appName);
+        $filename = $safeCode . '_' . $safeApp . '_MY_' . $timestamp . '.pdf';
 
         // Atur opsi untuk DOMPDF
         $options = new Options();
         $options->set('isHtml5ParserEnabled', true);
-        $options->set('isRemoteEnabled', true); // Jika Anda memiliki asset seperti gambar, pastikan ini diaktifkan
+        $options->set('isRemoteEnabled', true);
 
         // Inisialisasi DOMPDF
         $dompdf = new Dompdf($options);
@@ -59,11 +82,10 @@ class MalaysiaController extends Controller
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        // Simpan PDF ke storage
-        $pdfPath = storage_path("app/public/{$filename}");
-        file_put_contents($pdfPath, $dompdf->output());
-
-        // Kembalikan PDF sebagai unduhan
-        return response()->download($pdfPath)->deleteFileAfterSend(true);
+        // Kembalikan PDF sebagai unduhan langsung secara aman tanpa menyimpan di folder publik
+        return response($dompdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+        ]);
     }
 }

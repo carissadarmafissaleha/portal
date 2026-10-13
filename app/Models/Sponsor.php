@@ -4,27 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Sponsor extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
-    
-    public function Pendaftaran()
+    protected $fillable = [
+        'nama',
+        'nomortelp',
+        'keterangan',
+    ];
+
+    public function pendaftarans(): HasMany
     {
         return $this->hasMany(Pendaftaran::class);
     }
-    public function ProsesCpmi()
+
+    public function Pendaftaran(): HasMany
     {
-        return $this->hasMany(ProsesCpmi::class);
-    }
-    public function Marketing()
-    {
-        return $this->hasMany(Marketing::class);
-    }
-    public function user()
-    {
-        return $this->belongsTo(User::class);
+        return $this->pendaftarans();
     }
 }
+

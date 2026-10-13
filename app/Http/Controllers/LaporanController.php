@@ -20,6 +20,20 @@ class LaporanController extends Controller
 
     public function index(Request $request)
     {
+        $user = auth()->user();
+        if (!$user) {
+            abort(401, 'Silakan login terlebih dahulu.');
+        }
+
+        // Batasi akses hanya untuk administrator
+        $isAuthorized = $user->is_admin
+            || (method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['super_admin', 'admin']))
+            || (method_exists($user, 'can') && ($user->can('page_Dashboard') || $user->can('view_any_pendaftaran')));
+
+        if (!$isAuthorized) {
+            abort(403, 'Akses ditolak. Halaman laporan hanya dapat diakses oleh Administrator.');
+        }
+
         $tunggu = Tunggu::all();  // Or adjust this query based on your needs
         // Ambil filter tanggal dari request (bila ada)
         $start = $request->input('startDate');
@@ -197,6 +211,20 @@ class LaporanController extends Controller
 
     public function generatePdf(Request $request)
     {
+        $user = auth()->user();
+        if (!$user) {
+            abort(401, 'Silakan login terlebih dahulu.');
+        }
+
+        // Batasi akses hanya untuk administrator
+        $isAuthorized = $user->is_admin
+            || (method_exists($user, 'hasAnyRole') && $user->hasAnyRole(['super_admin', 'admin']))
+            || (method_exists($user, 'can') && ($user->can('page_Dashboard') || $user->can('view_any_pendaftaran')));
+
+        if (!$isAuthorized) {
+            abort(403, 'Akses ditolak. Unduh laporan hanya dapat dilakukan oleh Administrator.');
+        }
+
         $tunggu = Tunggu::all();  // Or adjust this query based on your needs
         // Sama dengan metode index, tetapi hasilnya di-generate sebagai PDF
         $start = $request->input('startDate');

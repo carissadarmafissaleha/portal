@@ -1,19 +1,63 @@
-# 1. Mengamankan berkas sensitif seperti .env, .git, dll.
-<Files .*>
-    # Apache 2.2
+# ==============================================================================
+# Keamanan Ketat Root Directory Laravel
+# ==============================================================================
+
+# 1. Nonaktifkan penjelajahan direktori (Directory Indexing)
+<IfModule mod_autoindex.c>
+    Options -Indexes
+</IfModule>
+
+# 2. Blokir akses ke berkas tersembunyi (dimulai dengan titik: .env, .git, dll)
+<FilesMatch "^\.">
     <IfModule !mod_authz_core.c>
         Order deny,allow
         Deny from all
     </IfModule>
-    # Apache 2.4
     <IfModule mod_authz_core.c>
         Require all denied
     </IfModule>
-</Files>
+</FilesMatch>
 
-# 2. Redirect internal ke folder public tanpa mengubah URL browser
+# 3. Blokir berkas konfigurasi, package, database, skrip, dan dokumentasi sensitif
+<FilesMatch "(composer\.(json|lock)|package(-lock)?\.json|artisan|phpunit\.xml|vite\.config\..*|tailwind\.config\..*|postcss\.config\..*|\.(env|sql|sqlite|log|sh|bak|md|txt|yml|yaml|xml|lock))$">
+    <IfModule !mod_authz_core.c>
+        Order deny,allow
+        Deny from all
+    </IfModule>
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
+
+# 4. Header Keamanan HTTP
+<IfModule mod_headers.c>
+    # Mencegah Clickjacking
+    Header always set X-Frame-Options "SAMEORIGIN"
+    # Mencegah MIME-type sniffing
+    Header always set X-Content-Type-Options "nosniff"
+    # Mengaktifkan filter XSS di browser
+    Header always set X-XSS-Protection "1; mode=block"
+    # Kebijakan Referrer
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# 5. Blokir akses langsung ke folder internal Laravel & Arahkan trafik ke folder public
 <IfModule mod_rewrite.c>
     RewriteEngine On
+
+    # Mencegah akses langsung ke folder sistem internal Laravel
+    RewriteRule ^(app|bootstrap|config|database|resources|routes|tests|stubs|docker|lang|vendor)($|/) - [F,L,NC]
+
+    # Mencegah akses langsung ke log dan cache framework di folder storage
+    RewriteRule ^storage/(logs|framework)($|/) - [F,L,NC]
+
+    # Pertahankan Authorization Header untuk otentikasi API / HTTP
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # Jika pengunjung mengakses /public/ secara eksplisit, redirect ke URL bersih tanpa /public/
+    RewriteCond %{THE_REQUEST} /public/([^\s?]*) [NC]
+    RewriteRule ^ %1 [L,NE,R=301]
 
     # Arahkan trafik ke folder public secara transparan
     RewriteCond %{REQUEST_URI} !^/public/
@@ -26,3 +70,4 @@
   AddHandler application/x-httpd-alt-php84___lsphp .php .php8 .phtml
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
+
