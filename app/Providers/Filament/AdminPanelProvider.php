@@ -52,8 +52,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->profile(EditProfile::class)
-//            ->font('Montserrat')
-            ->font('Inter')
+            ->font('Plus Jakarta Sans')
             ->defaultThemeMode(ThemeMode::Light)
             ->registration()
             ->passwordReset()
@@ -71,7 +70,8 @@ class AdminPanelProvider extends PanelProvider
             ->favicon(asset('images/icon.png'))
             ->breadcrumbs(false)
             ->colors([
-                'primary' => Color::Green,
+                'primary' => Color::Slate,
+                'gray' => Color::Zinc,
             ])
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')

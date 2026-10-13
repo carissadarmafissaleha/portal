@@ -9,15 +9,9 @@ export default {
     ],
     theme: {
         extend: {
-            colors: {
-                white: "#FFFFFF",
-                platinum: "#E8E9EB",
-                moonlight: "#F6F5F3",
-                translucent: {
-                    light: "rgba(255, 255, 255, 0.5)",
-                    DEFAULT: "rgba(255, 255, 255, 0.5)",
-                    dark: "rgba(25, 25, 25, 0.5)",
-                },
+            fontFamily: {
+                sans: ["'JetBrains Numbers'", "'Plus Jakarta Sans'", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"],
+                mono: ["'JetBrains Mono'", "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas", "monospace"],
             },
         },
     },
