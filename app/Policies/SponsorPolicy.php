@@ -1,75 +1,108 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 use App\Models\Sponsor;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SponsorPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:Sponsor');
+        return $user->can('view_any_sponsor');
     }
 
-    public function view(AuthUser $authUser, Sponsor $sponsor): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Sponsor $sponsor): bool
     {
-        return $authUser->can('View:Sponsor');
+        return $user->can('view_sponsor');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:Sponsor');
+        return $user->can('create_sponsor');
     }
 
-    public function update(AuthUser $authUser, Sponsor $sponsor): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Sponsor $sponsor): bool
     {
-        return $authUser->can('Update:Sponsor');
+        return $user->can('update_sponsor');
     }
 
-    public function delete(AuthUser $authUser, Sponsor $sponsor): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Sponsor $sponsor): bool
     {
-        return $authUser->can('Delete:Sponsor');
+        return $user->can('delete_sponsor');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:Sponsor');
+        return $user->can('delete_any_sponsor');
     }
 
-    public function restore(AuthUser $authUser, Sponsor $sponsor): bool
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, Sponsor $sponsor): bool
     {
-        return $authUser->can('Restore:Sponsor');
+        return $user->can('force_delete_sponsor');
     }
 
-    public function forceDelete(AuthUser $authUser, Sponsor $sponsor): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:Sponsor');
+        return $user->can('force_delete_any_sponsor');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Sponsor $sponsor): bool
     {
-        return $authUser->can('ForceDeleteAny:Sponsor');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:Sponsor');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser, Sponsor $sponsor): bool
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Sponsor $sponsor): bool
     {
-        return $authUser->can('Replicate:Sponsor');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:Sponsor');
+        return $user->can('{{ Reorder }}');
     }
-
 }

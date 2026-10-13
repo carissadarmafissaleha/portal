@@ -9,7 +9,7 @@ use TomatoPHP\FilamentSettingsHub\Services\Contracts\SettingHold;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Route;
-use BezhanSalleh\LanguageSwitch\LanguageSwitch;
+use BezhanSalleh\FilamentLanguageSwitch\LanguageSwitch;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -36,6 +36,13 @@ class AppServiceProvider extends ServiceProvider
                 // ])
                 ->circular(); // also accepts a closure
         });
+        FilamentUser::registerAction(\Filament\Actions\Action::make('update'));
+        FilamentUser::registerCreateAction(\Filament\Actions\Action::make('update'));
+        FilamentUser::registerEditAction(\Filament\Actions\Action::make('update'));
+        FilamentUser::registerFormInput(\Filament\Forms\Components\TextInput::make('text'));
+        FilamentUser::registerTableAction(\Filament\Tables\Actions\Action::make('update'));
+        FilamentUser::registerTableColumn(\Filament\Tables\Columns\Column::make('text'));
+        FilamentUser::registerTableFilter(\Filament\Tables\Filters\Filter::make('text'));
 
         // FilamentSettingsHub::register([
         //     SettingHold::make()

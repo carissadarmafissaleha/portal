@@ -1,3 +1,7 @@
+@import "/vendor/filament/filament/resources/css/theme.css";
+
+@config 'tailwind.config.js';
+
 .fi-body {
     position: relative;
     background-color: #ffffff;
@@ -55,9 +59,7 @@
 
 .fi-topbar > nav,
 .fi-sidebar-header {
-    background-color: transparent !important;
-    box-shadow: none !important;
-    outline: none !important;
+    @apply bg-transparent ring-0 shadow-none !important;
     transition: background-color 0.3s, top 0.3s;
 }
 

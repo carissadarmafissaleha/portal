@@ -34,14 +34,8 @@ class Province extends Model
     {
         return $this->hasMany(Regency::class);
     }
-
-    /**
-     * Province has many pendaftarans.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function pendaftarans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function user()
     {
-        return $this->hasMany(Pendaftaran::class);
+        return $this->belongsTo(User::class);
     }
 }

@@ -11,8 +11,8 @@ class PendingChart extends ChartWidget
 {
     use InteractsWithPageFilters;
 
-    protected ?string $heading = 'PENDING';
-    protected ?string $maxHeight = '200px';
+    protected static ?string $heading = 'PENDING';
+    protected static ?string $maxHeight = '200px';
     // protected int | string | array $columnSpan = 'full';
 
     protected function getData(): array

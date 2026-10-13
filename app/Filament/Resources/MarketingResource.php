@@ -10,13 +10,14 @@ use App\Models\Pendaftaran;
 use App\Models\ProsesCpmi;
 use App\Models\Status;
 use App\Models\Tujuan;
-use UnitEnum;
-use BackedEnum;
+use EightyNine\Approvals\Models\ApprovableModel;
+use EightyNine\Approvals\Tables\Actions\ApprovalActions;
+use EightyNine\Approvals\Tables\Columns\ApprovalStatusColumn;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Schema;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -24,16 +25,16 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 //-------------
-use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\Repeater;
-use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Toggle;
-use Filament\Schemas\Components\Wizard;
-use Filament\Schemas\Components\Wizard\Step;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Wizard\Step;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ExportAction;
 use Filament\Tables\Columns\IconColumn;
@@ -52,15 +53,15 @@ class MarketingResource extends Resource
         return static::getModel()::count();
     }
 
-    // protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-check-circle';
+    // protected static ?string $navigationIcon = 'heroicon-o-check-circle';
     protected static ?string $navigationLabel = 'MARKETING';
     protected static ?int $navigationSort = 1;
-    protected static string | UnitEnum | null $navigationGroup = 'PROSES';
+    protected static ?string $navigationGroup = 'PROSES';
 
 
-    public static function form(Schema $schema): Schema
+    public static function form(Form $form): Form
     {
-        return $schema
+        return $form
             ->schema([
                 Wizard::make([
                     Step::make('Tahap 1')
@@ -754,6 +755,11 @@ class MarketingResource extends Resource
                     ->label('FILTER'),
             )->filtersFormColumns(2)
             ->actions([
+                ...\EightyNine\Approvals\Tables\Actions\ApprovalActions::make(
+                    Tables\Actions\Action::make("Done")
+                        ->label('APRROVE')
+                        ->hidden(fn(ApprovableModel $record) => $record->shouldBeHidden())
+                ),
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\EditAction::make()
                         ->label('UPDATE')

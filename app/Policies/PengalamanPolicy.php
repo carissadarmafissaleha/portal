@@ -1,75 +1,108 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 use App\Models\Pengalaman;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PengalamanPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:Pengalaman');
+        return $user->can('view_any_pengalaman');
     }
 
-    public function view(AuthUser $authUser, Pengalaman $pengalaman): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Pengalaman $pengalaman): bool
     {
-        return $authUser->can('View:Pengalaman');
+        return $user->can('view_pengalaman');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:Pengalaman');
+        return $user->can('create_pengalaman');
     }
 
-    public function update(AuthUser $authUser, Pengalaman $pengalaman): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Pengalaman $pengalaman): bool
     {
-        return $authUser->can('Update:Pengalaman');
+        return $user->can('update_pengalaman');
     }
 
-    public function delete(AuthUser $authUser, Pengalaman $pengalaman): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Pengalaman $pengalaman): bool
     {
-        return $authUser->can('Delete:Pengalaman');
+        return $user->can('delete_pengalaman');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:Pengalaman');
+        return $user->can('delete_any_pengalaman');
     }
 
-    public function restore(AuthUser $authUser, Pengalaman $pengalaman): bool
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, Pengalaman $pengalaman): bool
     {
-        return $authUser->can('Restore:Pengalaman');
+        return $user->can('force_delete_pengalaman');
     }
 
-    public function forceDelete(AuthUser $authUser, Pengalaman $pengalaman): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:Pengalaman');
+        return $user->can('force_delete_any_pengalaman');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Pengalaman $pengalaman): bool
     {
-        return $authUser->can('ForceDeleteAny:Pengalaman');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:Pengalaman');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser, Pengalaman $pengalaman): bool
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Pengalaman $pengalaman): bool
     {
-        return $authUser->can('Replicate:Pengalaman');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:Pengalaman');
+        return $user->can('{{ Reorder }}');
     }
-
 }

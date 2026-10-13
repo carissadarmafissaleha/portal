@@ -1,75 +1,108 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 use App\Models\Status;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class StatusPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:Status');
+        return $user->can('view_any_status');
     }
 
-    public function view(AuthUser $authUser, Status $status): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Status $status): bool
     {
-        return $authUser->can('View:Status');
+        return $user->can('view_status');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:Status');
+        return $user->can('create_status');
     }
 
-    public function update(AuthUser $authUser, Status $status): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Status $status): bool
     {
-        return $authUser->can('Update:Status');
+        return $user->can('update_status');
     }
 
-    public function delete(AuthUser $authUser, Status $status): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Status $status): bool
     {
-        return $authUser->can('Delete:Status');
+        return $user->can('delete_status');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:Status');
+        return $user->can('delete_any_status');
     }
 
-    public function restore(AuthUser $authUser, Status $status): bool
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, Status $status): bool
     {
-        return $authUser->can('Restore:Status');
+        return $user->can('force_delete_status');
     }
 
-    public function forceDelete(AuthUser $authUser, Status $status): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:Status');
+        return $user->can('force_delete_any_status');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Status $status): bool
     {
-        return $authUser->can('ForceDeleteAny:Status');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:Status');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser, Status $status): bool
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Status $status): bool
     {
-        return $authUser->can('Replicate:Status');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:Status');
+        return $user->can('{{ Reorder }}');
     }
-
 }

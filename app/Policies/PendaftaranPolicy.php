@@ -1,75 +1,108 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 use App\Models\Pendaftaran;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PendaftaranPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:Pendaftaran');
+        return $user->can('view_any_pendaftaran');
     }
 
-    public function view(AuthUser $authUser, Pendaftaran $pendaftaran): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Pendaftaran $pendaftaran): bool
     {
-        return $authUser->can('View:Pendaftaran');
+        return $user->can('view_pendaftaran');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:Pendaftaran');
+        return $user->can('create_pendaftaran');
     }
 
-    public function update(AuthUser $authUser, Pendaftaran $pendaftaran): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Pendaftaran $pendaftaran): bool
     {
-        return $authUser->can('Update:Pendaftaran');
+        return $user->can('update_pendaftaran');
     }
 
-    public function delete(AuthUser $authUser, Pendaftaran $pendaftaran): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Pendaftaran $pendaftaran): bool
     {
-        return $authUser->can('Delete:Pendaftaran');
+        return $user->can('delete_pendaftaran');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:Pendaftaran');
+        return $user->can('delete_any_pendaftaran');
     }
 
-    public function restore(AuthUser $authUser, Pendaftaran $pendaftaran): bool
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, Pendaftaran $pendaftaran): bool
     {
-        return $authUser->can('Restore:Pendaftaran');
+        return $user->can('force_delete_pendaftaran');
     }
 
-    public function forceDelete(AuthUser $authUser, Pendaftaran $pendaftaran): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:Pendaftaran');
+        return $user->can('force_delete_any_pendaftaran');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Pendaftaran $pendaftaran): bool
     {
-        return $authUser->can('ForceDeleteAny:Pendaftaran');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:Pendaftaran');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser, Pendaftaran $pendaftaran): bool
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Pendaftaran $pendaftaran): bool
     {
-        return $authUser->can('Replicate:Pendaftaran');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:Pendaftaran');
+        return $user->can('{{ Reorder }}');
     }
-
 }

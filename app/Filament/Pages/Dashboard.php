@@ -2,12 +2,11 @@
 
 namespace App\Filament\Pages;
 
-use BackedEnum;
 use App\Models\Kantor; // Pastikan untuk mengimport model Kantor
 use Filament\Forms\Components\DatePicker;
-use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
-use Filament\Schemas\Schema;
+use Filament\Forms\Form;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Illuminate\Contracts\View\View;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
@@ -25,7 +24,7 @@ class Dashboard extends \Filament\Pages\Dashboard
     }
 
     protected static ?string $title = 'RINGKASAN';
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-presentation-chart-line';
+    protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
 
     use HasFiltersForm;
 
@@ -68,9 +67,9 @@ class Dashboard extends \Filament\Pages\Dashboard
             // ->title('Unduh Laporan')
         ];
     }
-    public function filtersForm(Schema $schema): Schema
+    public function filtersForm(Form $form): Form
     {
-        return $schema
+        return $form
             ->schema([
                 Fieldset::make('FILTER')
                     ->schema([

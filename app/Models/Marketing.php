@@ -2,162 +2,97 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use EightyNine\Approvals\Models\ApprovableModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
 
-class Marketing extends Model
+class Marketing extends ApprovableModel
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    protected $guarded = [];
 
-    protected $fillable = [
-        'user_id',
-        'foto',
-        'code_hk',
-        'code_tw',
-        'code_sgp',
-        'code_my',
-        'nomor_hp',
-        'get_job',
-        'tgl_job',
-        'nama',
-        'national',
-        'kelamin',
-        'lulusan',
-        'agama',
-        'anakke',
-        'brother',
-        'sister',
-        'usia',
-        'tanggal_lahir',
-        'status_nikah',
-        'tinggi_badan',
-        'berat_badan',
-        'son',
-        'daughter',
-        'careofbabies',
-        'careoftoddler',
-        'careofchildren',
-        'careofelderly',
-        'careofdisabled',
-        'careofbedridden',
-        'careofpet',
-        'householdworks',
-        'carwashing',
-        'gardening',
-        'cooking',
-        'driving',
-        'hongkong',
-        'singapore',
-        'taiwan',
-        'malaysia',
-        'macau',
-        'middleeast',
-        'other',
-        'homecountry',
-        'spokenenglish',
-        'spokencantonese',
-        'spokenmandarin',
-        'remark',
-        'pengalaman',
-        'babi',
-        'liburbukanhariminggu',
-        'berbagikamar',
-        'takutanjing',
-        'merokok',
-        'alkohol',
-        'pernahsakit',
-        'ketsakit',
-        'tujuan_id',
-        'kantor_id',
-        'marketing_id',
-        'pengalaman_id',
-        'dapatjob',
-        'pendaftaran_id',
-        'proses_cpmi_id',
-        'agency_id',
-        'sales_id',
-    ];
-
+    // Meng-cast 'pengalaman' sebagai JSON
     protected $casts = [
-        'pengalaman' => 'array',
-        'get_job' => 'boolean',
-        'tgl_job' => 'date',
-        'tanggal_lahir' => 'date',
+        'pengalaman' => 'array', // Laravel akan otomatis mengonversi ke array
     ];
 
     // Relasi ke Pendaftaran
-    public function pendaftaran(): BelongsTo
+    public function Pendaftaran()
     {
         return $this->belongsTo(Pendaftaran::class, 'pendaftaran_id');
     }
 
-
     // Relasi ke ProsesCpmi
-    public function prosesCpmi(): BelongsTo
+    public function prosesCpmi()
     {
-        return $this->belongsTo(ProsesCpmi::class, 'proses_cpmi_id');
+        return $this->belongsTo(ProsesCpmi::class, 'pendaftaran_id');
     }
 
     // Relasi ke Tujuan
-    public function tujuan(): BelongsTo
+    public function tujuan()
     {
-        return $this->belongsTo(Tujuan::class, 'tujuan_id');
+        return $this->belongsTo(Tujuan::class);
     }
 
-    // Relasi ke Status (melalui ProsesCpmi atau kolom jika ada)
-    public function status(): BelongsTo
+    // Relasi ke Status
+    public function status()
     {
-        return $this->belongsTo(Status::class, 'status_id');
+        return $this->belongsTo(Status::class);
     }
 
     // Relasi ke Sales
-    public function sales(): BelongsTo
+    public function sales()
     {
         return $this->belongsTo(Sales::class, 'sales_id');
     }
 
     // Relasi ke Sponsor
-    public function sponsor(): BelongsTo
+    public function sponsor()
     {
-        return $this->belongsTo(Sponsor::class, 'sponsor_id');
+        return $this->belongsTo(Sponsor::class);
     }
 
     // Relasi ke Agency
-    public function agency(): BelongsTo
+    public function agency()
     {
-        return $this->belongsTo(Agency::class, 'agency_id');
+        return $this->belongsTo(Agency::class);
     }
 
     // Relasi ke Kantor
-    public function kantor(): BelongsTo
+    public function kantor()
     {
-        return $this->belongsTo(Kantor::class, 'kantor_id');
+        return $this->belongsTo(Kantor::class);
     }
 
-    // Relasi ke Pengalaman
-    public function pengalamans(): BelongsTo
+    // Relasi ke Regency
+    public function regency()
     {
-        return $this->belongsTo(Pengalaman::class, 'pengalaman_id');
+        return $this->belongsTo(Regency::class);
     }
 
-    // Relasi ke User
-    public function user(): BelongsTo
+    // Relasi ke Pelatihan
+    public function pelatihan()
     {
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(Pelatihan::class);
     }
 
+    // Relasi ke Village
+    public function village()
+    {
+        return $this->belongsTo(Village::class, 'village_id');
+    }
     public function shouldBeHidden(): \Filament\Actions\Action
     {
         return \Filament\Actions\Action::make("Done")
             ->color("success")
             ->hidden(fn(ApprovableModel $record) => $record->shouldBeHidden());
     }
-
-    public function getFotoUrlAttribute(): ?string
+    public function user()
     {
-        return $this->foto ? asset('storage/' . $this->foto) : null;
+        return $this->belongsTo(User::class);
+    }
+    public function getFotoUrlAttribute()
+    {
+        return asset('storage/' . $this->foto);
     }
 }
-

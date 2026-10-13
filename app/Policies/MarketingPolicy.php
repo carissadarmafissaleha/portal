@@ -1,75 +1,108 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 use App\Models\Marketing;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class MarketingPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:Marketing');
+        return $user->can('view_any_marketing');
     }
 
-    public function view(AuthUser $authUser, Marketing $marketing): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Marketing $marketing): bool
     {
-        return $authUser->can('View:Marketing');
+        return $user->can('view_marketing');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:Marketing');
+        return $user->can('create_marketing');
     }
 
-    public function update(AuthUser $authUser, Marketing $marketing): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Marketing $marketing): bool
     {
-        return $authUser->can('Update:Marketing');
+        return $user->can('update_marketing');
     }
 
-    public function delete(AuthUser $authUser, Marketing $marketing): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Marketing $marketing): bool
     {
-        return $authUser->can('Delete:Marketing');
+        return $user->can('delete_marketing');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:Marketing');
+        return $user->can('delete_any_marketing');
     }
 
-    public function restore(AuthUser $authUser, Marketing $marketing): bool
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, Marketing $marketing): bool
     {
-        return $authUser->can('Restore:Marketing');
+        return $user->can('force_delete_marketing');
     }
 
-    public function forceDelete(AuthUser $authUser, Marketing $marketing): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:Marketing');
+        return $user->can('force_delete_any_marketing');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Marketing $marketing): bool
     {
-        return $authUser->can('ForceDeleteAny:Marketing');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:Marketing');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser, Marketing $marketing): bool
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Marketing $marketing): bool
     {
-        return $authUser->can('Replicate:Marketing');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:Marketing');
+        return $user->can('{{ Reorder }}');
     }
-
 }

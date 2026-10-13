@@ -45,14 +45,8 @@ class Village extends Model
     {
         return $this->belongsTo(District::class);
     }
-
-    /**
-     * Village has many pendaftarans.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function pendaftarans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function user()
     {
-        return $this->hasMany(Pendaftaran::class);
+        return $this->belongsTo(User::class);
     }
 }

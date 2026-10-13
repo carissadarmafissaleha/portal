@@ -2,8 +2,6 @@
 
 namespace App\Filament\Pages;
 
-use BackedEnum;
-use UnitEnum;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Pages\Page;
 use Dotswan\FilamentLaravelPulse\Widgets\PulseCache;
@@ -28,12 +26,12 @@ class Pulse extends Page
         return '/unauthorized'; // Redirect jika user tidak memiliki akses
     }
 
-    protected static string | UnitEnum | null $navigationGroup = 'Settings';
+    protected static ?string $navigationGroup = 'Settings';
     protected static ?string $navigationLabel = 'Status Aplikasi';
     protected static ?string $title = 'Status Aplikasi';
     protected ?string $heading = 'Aplikasi Monitor';
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bars-3-bottom-left';
-    protected string $view = 'filament.pages.pulse';
+    protected static ?string $navigationIcon = 'heroicon-o-bars-3-bottom-left';
+    protected static string $view = 'filament.pages.pulse';
     protected static ?int $navigationSort = 15;
 
 

@@ -1,75 +1,108 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 use App\Models\Tunggu;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class TungguPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:Tunggu');
+        return $user->can('view_any_tunggu');
     }
 
-    public function view(AuthUser $authUser, Tunggu $tunggu): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Tunggu $tunggu): bool
     {
-        return $authUser->can('View:Tunggu');
+        return $user->can('view_tunggu');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:Tunggu');
+        return $user->can('create_tunggu');
     }
 
-    public function update(AuthUser $authUser, Tunggu $tunggu): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Tunggu $tunggu): bool
     {
-        return $authUser->can('Update:Tunggu');
+        return $user->can('update_tunggu');
     }
 
-    public function delete(AuthUser $authUser, Tunggu $tunggu): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Tunggu $tunggu): bool
     {
-        return $authUser->can('Delete:Tunggu');
+        return $user->can('delete_tunggu');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:Tunggu');
+        return $user->can('delete_any_tunggu');
     }
 
-    public function restore(AuthUser $authUser, Tunggu $tunggu): bool
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, Tunggu $tunggu): bool
     {
-        return $authUser->can('Restore:Tunggu');
+        return $user->can('force_delete_tunggu');
     }
 
-    public function forceDelete(AuthUser $authUser, Tunggu $tunggu): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:Tunggu');
+        return $user->can('force_delete_any_tunggu');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Tunggu $tunggu): bool
     {
-        return $authUser->can('ForceDeleteAny:Tunggu');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:Tunggu');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser, Tunggu $tunggu): bool
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Tunggu $tunggu): bool
     {
-        return $authUser->can('Replicate:Tunggu');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:Tunggu');
+        return $user->can('{{ Reorder }}');
     }
-
 }

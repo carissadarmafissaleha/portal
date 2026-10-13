@@ -8,104 +8,93 @@ use Illuminate\Database\Eloquent\Model;
 use OwenIt\Auditing\Contracts\Audit;
 use OwenIt\Auditing\Contracts\Auditable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Arr;
 use Illuminate\Support\HtmlString;
 
 class ProsesCpmi extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
+
     use HasFactory;
-
-    protected $fillable = [
-        'user_id',
-        'pelatihan_id',
-        'pendaftaran_id',
-        'tanggal_pra_bpjs',
-        'tanggal_ujk',
-        'tglsiapkerja',
-        'email_siapkerja',
-        'password_siapkerja',
-        'tgl_bp2mi',
-        'no_id_pmi',
-        'file_pp',
-        'tanggal_medical_full',
-        'tanggal_ec',
-        'tanggal_visa',
-        'tanggal_bpjs_purna',
-        'tanggal_teto',
-        'tanggal_pap',
-        'tanggal_penerbangan',
-        'tanggal_in_toyo',
-        'tanggal_in_agency',
-        'file_medical_full',
-        'file_ec',
-        'file_visa',
-        'file_bpjs_purna',
-        'file_teto',
-        'file_pap',
-        'file_penerbangan',
-        'file_in_toyo',
-        'file_in_agency',
-        'status_id',
-        'tujuan_id',
-        'tunggu_id',
-    ];
-
-    protected $casts = [
-        'tanggal_pra_bpjs' => 'date',
-        'tanggal_ujk' => 'date',
-        'tglsiapkerja' => 'date',
-        'tgl_bp2mi' => 'date',
-        'tanggal_medical_full' => 'date',
-        'tanggal_ec' => 'date',
-        'tanggal_visa' => 'date',
-        'tanggal_bpjs_purna' => 'date',
-        'tanggal_teto' => 'date',
-        'tanggal_pap' => 'date',
-        'tanggal_penerbangan' => 'date',
-        'tanggal_in_toyo' => 'date',
-        'tanggal_in_agency' => 'date',
-    ];
+    protected $guarded = [];
 
     // Relasi ke Pendaftaran
-    public function pendaftaran(): BelongsTo
+    public function pendaftaran()
     {
         return $this->belongsTo(Pendaftaran::class);
     }
 
     // Relasi ke Tujuan
-    public function tujuan(): BelongsTo
+    public function tujuan()
     {
         return $this->belongsTo(Tujuan::class);
     }
 
     // Relasi ke Tunggu
-    public function tunggu(): BelongsTo
+    public function tunggu()
     {
         return $this->belongsTo(Tunggu::class);
     }
 
     // Relasi ke Status
-    public function status(): BelongsTo
+    public function status()
     {
-        return $this->belongsTo(Status::class, 'status_id');
+        return $this->belongsTo(Status::class, 'status_id');  // 'status_id' adalah foreign key yang ada di tabel 'proses_cpmis'
+    }
+
+    // Relasi ke Sales
+    public function sales()
+    {
+        return $this->belongsTo(Sales::class);
     }
 
     // Relasi ke Pelatihan
-    public function pelatihan(): BelongsTo
+    public function pelatihan()
     {
         return $this->belongsTo(Pelatihan::class);
     }
 
     // Relasi ke Marketing
-    public function marketing(): HasOne
+    public function marketing()
     {
-        return $this->hasOne(Marketing::class, 'proses_cpmi_id');
+        return $this->belongsTo(Marketing::class);
     }
 
-    // Relasi ke User
-    public function user(): BelongsTo
+    // Relasi ke Sponsor
+    public function sponsor()
+    {
+        return $this->belongsTo(Sponsor::class);
+    }
+
+    // Relasi ke Agency
+    public function agency()
+    {
+        return $this->belongsTo(Agency::class);
+    }
+
+    // Relasi ke Kantor
+    public function kantor()
+    {
+        return $this->belongsTo(Kantor::class);
+    }
+
+    // Relasi ke Pengalaman
+    public function pengalaman()
+    {
+        return $this->belongsTo(Pengalaman::class);
+    }
+
+    // Relasi ke Regency
+    public function regency()
+    {
+        return $this->belongsTo(Regency::class);
+    }
+
+    // Relasi ke Village
+    public function village()
+    {
+        return $this->belongsTo(Village::class, 'village_id');
+    }public function user()
     {
         return $this->belongsTo(User::class);
     }

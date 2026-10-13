@@ -1,75 +1,108 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 use App\Models\Agency;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AgencyPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:Agency');
+        return $user->can('view_any_agency');
     }
 
-    public function view(AuthUser $authUser, Agency $agency): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Agency $agency): bool
     {
-        return $authUser->can('View:Agency');
+        return $user->can('view_agency');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:Agency');
+        return $user->can('create_agency');
     }
 
-    public function update(AuthUser $authUser, Agency $agency): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Agency $agency): bool
     {
-        return $authUser->can('Update:Agency');
+        return $user->can('update_agency');
     }
 
-    public function delete(AuthUser $authUser, Agency $agency): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Agency $agency): bool
     {
-        return $authUser->can('Delete:Agency');
+        return $user->can('delete_agency');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:Agency');
+        return $user->can('delete_any_agency');
     }
 
-    public function restore(AuthUser $authUser, Agency $agency): bool
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, Agency $agency): bool
     {
-        return $authUser->can('Restore:Agency');
+        return $user->can('force_delete_agency');
     }
 
-    public function forceDelete(AuthUser $authUser, Agency $agency): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:Agency');
+        return $user->can('force_delete_any_agency');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Agency $agency): bool
     {
-        return $authUser->can('ForceDeleteAny:Agency');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:Agency');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser, Agency $agency): bool
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Agency $agency): bool
     {
-        return $authUser->can('Replicate:Agency');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:Agency');
+        return $user->can('{{ Reorder }}');
     }
-
 }

@@ -14,8 +14,9 @@ use Filament\Panel; // Pastikan untuk mengimpor Panel
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class User extends Authenticatable implements
-    HasAvatar,
-    FilamentUser
+    HasAvatar
+    // MustVerifyEmail
+    // FilamentUser
 {
     use HasFactory, Notifiable, HasRoles;
 
@@ -48,29 +49,24 @@ class User extends Authenticatable implements
 
     public function canAccessPanel(Panel $panel): bool
     {
-        // Semua akun terdaftar yang valid memiliki akses ke panel sesuai role & permission masing-masing
-        return true;
+        // Tambahkan logika yang sesuai untuk menentukan akses
+        return str_ends_with($this->email, '@example.com') && $this->hasVerifiedEmail();
     }
 
     // Relasi dengan Pendaftaran
-    public function pendaftarans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function pendaftarans()
     {
         return $this->hasMany(Pendaftaran::class);
     }
 
     // Relasi dengan Proses CPMI
-    public function prosesCpmis(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function proses_cpmis()
     {
         return $this->hasMany(ProsesCpmi::class);
     }
 
-    public function proses_cpmis(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->prosesCpmis();
-    }
-
     // Relasi dengan Marketings
-    public function marketings(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function marketings()
     {
         return $this->hasMany(Marketing::class);
     }

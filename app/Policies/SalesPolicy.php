@@ -1,75 +1,108 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 use App\Models\Sales;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class SalesPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:Sales');
+        return $user->can('view_any_sales');
     }
 
-    public function view(AuthUser $authUser, Sales $sales): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, Sales $sales): bool
     {
-        return $authUser->can('View:Sales');
+        return $user->can('view_sales');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:Sales');
+        return $user->can('create_sales');
     }
 
-    public function update(AuthUser $authUser, Sales $sales): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, Sales $sales): bool
     {
-        return $authUser->can('Update:Sales');
+        return $user->can('update_sales');
     }
 
-    public function delete(AuthUser $authUser, Sales $sales): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, Sales $sales): bool
     {
-        return $authUser->can('Delete:Sales');
+        return $user->can('delete_sales');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:Sales');
+        return $user->can('delete_any_sales');
     }
 
-    public function restore(AuthUser $authUser, Sales $sales): bool
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, Sales $sales): bool
     {
-        return $authUser->can('Restore:Sales');
+        return $user->can('force_delete_sales');
     }
 
-    public function forceDelete(AuthUser $authUser, Sales $sales): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:Sales');
+        return $user->can('force_delete_any_sales');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, Sales $sales): bool
     {
-        return $authUser->can('ForceDeleteAny:Sales');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:Sales');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser, Sales $sales): bool
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, Sales $sales): bool
     {
-        return $authUser->can('Replicate:Sales');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:Sales');
+        return $user->can('{{ Reorder }}');
     }
-
 }

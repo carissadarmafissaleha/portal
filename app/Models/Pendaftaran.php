@@ -16,123 +16,78 @@ class Pendaftaran extends Model implements Auditable
 {
     use \OwenIt\Auditing\Auditable;
     use HasFactory;
-    protected $fillable = [
-        'user_id',
-        'nama',
-        'nomor_ktp',
-        'tempat_lahir',
-        'tgl_lahir',
-        'nomor_telp',
-        'nomor_kk',
-        'nama_wali',
-        'nomor_ktp_wali',
-        'alamat',
-        'rtrw',
-        'tanggal_pra_medical',
-        'pra_medical',
-        'file_medical',
-        'file_ktp',
-        'file_ktp_wali',
-        'file_kk',
-        'file_akta_lahir',
-        'file_surat_nikah',
-        'file_surat_ijin',
-        'file_ijazah',
-        'file_tambahan',
-        'data_lengkap',
-        'kantor',
-        'tujuan',
-        'pengalaman',
-        'tanggal_pra_bpjs',
-        'email_siapkerja',
-        'tglsiapkerja',
-        'password_siapkerja',
-        'tgl_bp2mi',
-        'no_id_pmi',
-        'file_pp',
-        'tanggal_medical_full',
-        'tanggal_ec',
-        'tanggal_visa',
-        'tanggal_bpjs_purna',
-        'tanggal_teto',
-        'tanggal_pap',
-        'tanggal_penerbangan',
-        'tanggal_in_toyo',
-        'tanggal_in_agency',
-        'province_id',
-        'regency_id',
-        'district_id',
-        'village_id',
-        'kantor_id',
-        'pengalaman_id',
-        'sponsor_id',
-        'tujuan_id',
-    ];
+    protected $guarded = [];
 
     protected static ?string $recordTitleAttribute = 'nama';
 
-    protected $casts = [
-        'tgl_lahir' => 'date',
-        'tanggal_pra_medical' => 'date',
-        'data_lengkap' => 'boolean',
-    ];
-
     // Relasi ke Province
-    public function province(): BelongsTo
+    public function province()
     {
         return $this->belongsTo(Province::class);
     }
 
     // Relasi ke Regency
-    public function regency(): BelongsTo
+    public function regency()
     {
         return $this->belongsTo(Regency::class);
     }
 
     // Relasi ke District
-    public function district(): BelongsTo
+    public function district()
     {
         return $this->belongsTo(District::class);
     }
 
     // Relasi ke Village
-    public function village(): BelongsTo
+    public function village()
     {
         return $this->belongsTo(Village::class);
     }
 
     // Relasi ke ProsesCpmi
-    public function prosesCpmi(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function prosesCpmi()
     {
         return $this->hasMany(ProsesCpmi::class);
     }
 
     // Relasi ke Kantor
-    public function kantor(): BelongsTo
+    public function kantor()
     {
         return $this->belongsTo(Kantor::class);
     }
 
     // Relasi ke Sponsor
-    public function sponsor(): BelongsTo
+    public function sponsor()
     {
         return $this->belongsTo(Sponsor::class);
     }
 
     // Relasi ke Tujuan
-    public function tujuan(): BelongsTo
+    public function tujuan()
     {
         return $this->belongsTo(Tujuan::class);
     }
 
+    // Relasi ke Tunggu
+    public function tunggu()
+    {
+        return $this->belongsTo(Tunggu::class);
+    }
+
     // Relasi ke Pengalaman
-    public function pengalaman(): BelongsTo
+    public function pengalaman()
     {
         return $this->belongsTo(Pengalaman::class);
     }
 
+    // Relasi ke Pelatihan
+    public function pelatihan()
+    {
+        return $this->belongsTo(Pelatihan::class);
+    }
+
     // Relasi ke Marketing
-    public function marketing(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function marketing()
     {
         return $this->hasMany(Marketing::class);
     }

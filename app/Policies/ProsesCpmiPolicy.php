@@ -1,75 +1,108 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
 use App\Models\ProsesCpmi;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ProsesCpmiPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:ProsesCpmi');
+        return $user->can('view_any_proses::cpmi');
     }
 
-    public function view(AuthUser $authUser, ProsesCpmi $prosesCpmi): bool
+    /**
+     * Determine whether the user can view the model.
+     */
+    public function view(User $user, ProsesCpmi $prosesCpmi): bool
     {
-        return $authUser->can('View:ProsesCpmi');
+        return $user->can('view_proses::cpmi');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:ProsesCpmi');
+        return $user->can('create_proses::cpmi');
     }
 
-    public function update(AuthUser $authUser, ProsesCpmi $prosesCpmi): bool
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function update(User $user, ProsesCpmi $prosesCpmi): bool
     {
-        return $authUser->can('Update:ProsesCpmi');
+        return $user->can('update_proses::cpmi');
     }
 
-    public function delete(AuthUser $authUser, ProsesCpmi $prosesCpmi): bool
+    /**
+     * Determine whether the user can delete the model.
+     */
+    public function delete(User $user, ProsesCpmi $prosesCpmi): bool
     {
-        return $authUser->can('Delete:ProsesCpmi');
+        return $user->can('delete_proses::cpmi');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:ProsesCpmi');
+        return $user->can('delete_any_proses::cpmi');
     }
 
-    public function restore(AuthUser $authUser, ProsesCpmi $prosesCpmi): bool
+    /**
+     * Determine whether the user can permanently delete.
+     */
+    public function forceDelete(User $user, ProsesCpmi $prosesCpmi): bool
     {
-        return $authUser->can('Restore:ProsesCpmi');
+        return $user->can('force_delete_proses::cpmi');
     }
 
-    public function forceDelete(AuthUser $authUser, ProsesCpmi $prosesCpmi): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:ProsesCpmi');
+        return $user->can('force_delete_any_proses::cpmi');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     */
+    public function restore(User $user, ProsesCpmi $prosesCpmi): bool
     {
-        return $authUser->can('ForceDeleteAny:ProsesCpmi');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:ProsesCpmi');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser, ProsesCpmi $prosesCpmi): bool
+    /**
+     * Determine whether the user can replicate.
+     */
+    public function replicate(User $user, ProsesCpmi $prosesCpmi): bool
     {
-        return $authUser->can('Replicate:ProsesCpmi');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:ProsesCpmi');
+        return $user->can('{{ Reorder }}');
     }
-
 }

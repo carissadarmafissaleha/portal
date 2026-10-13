@@ -2,12 +2,10 @@
 
 namespace App\Filament\Resources;
 
-use BackedEnum;
-use UnitEnum;
 use Filament\Forms;
 use App\Models\User;
 use Filament\Tables;
-use Filament\Schemas\Schema;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
 use Illuminate\Support\Facades\Hash;
@@ -20,10 +18,10 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use App\Filament\Resources\UserResource\Pages;
-use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\ToggleColumn;
-use STS\FilamentImpersonate\Actions\Impersonate;
+use STS\FilamentImpersonate\Tables\Actions\Impersonate;
 
 class UserResource extends Resource
 {
@@ -31,7 +29,7 @@ class UserResource extends Resource
 
     protected static ?int $navigationSort = 9;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-lock-closed';
+    protected static ?string $navigationIcon = 'heroicon-o-lock-closed';
 
 
     public static function getNavigationLabel(): string
@@ -49,7 +47,7 @@ class UserResource extends Resource
         return trans('filament-users::user.resource.single');
     }
 
-    public static function getNavigationGroup(): string | UnitEnum | null
+    public static function getNavigationGroup(): ?string
     {
         return config('filament-users.group');
     }
@@ -59,7 +57,7 @@ class UserResource extends Resource
         return trans('filament-users::user.resource.title.resource');
     }
 
-    public static function form(Schema $schema): Schema
+    public static function form(Form $form): Form
     {
         $rows = [
             
@@ -95,9 +93,9 @@ class UserResource extends Resource
                 ->label(trans('filament-users::user.resource.roles'));
         }
 
-        $schema->schema($rows);
+        $form->schema($rows);
 
-        return $schema;
+        return $form;
     }
 
     public static function table(Table $table): Table

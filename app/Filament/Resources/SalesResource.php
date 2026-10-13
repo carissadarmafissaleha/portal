@@ -6,10 +6,8 @@ use App\Filament\Resources\SalesResource\Pages;
 use App\Filament\Resources\SalesResource\RelationManagers;
 use App\Models\Sales;
 use Filament\Forms;
-use BackedEnum;
-use UnitEnum;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Schema;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -21,13 +19,13 @@ class SalesResource extends Resource
 {
     protected static ?string $model = Sales::class;
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-s-squares-plus';
-    protected static string | UnitEnum | null $navigationGroup = 'Modul';
+    protected static ?string $navigationIcon = 'heroicon-s-squares-plus';
+    protected static ?string $navigationGroup = 'Modul';
     protected static ?string $navigationLabel = 'Sales Marketing';
     protected static ?int $navigationSort = -8;
-    public static function form(Schema $schema): Schema
+    public static function form(Form $form): Form
     {
-        return $schema
+        return $form
             ->schema([
                 TextInput::make('nama')->required(),
             ]);

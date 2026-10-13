@@ -2,71 +2,143 @@
 
 namespace App\Policies;
 
-use Illuminate\Foundation\Auth\User as AuthUser;
+use App\Models\User;
+
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
 {
     use HandlesAuthorization;
-    
-    public function viewAny(AuthUser $authUser): bool
+
+    /**
+     * Determine whether the user can view any models.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function viewAny(User $user): bool
     {
-        return $authUser->can('ViewAny:User');
+        return $user->can('view_any_user');
     }
 
-    public function view(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can view the model.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function view(User $user): bool
     {
-        return $authUser->can('View:User');
+        return $user->can('view_user');
     }
 
-    public function create(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can create models.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function create(User $user): bool
     {
-        return $authUser->can('Create:User');
+        return $user->can('create_user');
     }
 
-    public function update(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can update the model.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function update(User $user): bool
     {
-        return $authUser->can('Update:User');
+        return $user->can('update_user');
     }
 
-    public function delete(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can delete the model.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function delete(User $user): bool
     {
-        return $authUser->can('Delete:User');
+        return $user->can('delete_user');
     }
 
-    public function deleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk delete.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function deleteAny(User $user): bool
     {
-        return $authUser->can('DeleteAny:User');
+        return $user->can('delete_any_user');
     }
 
-    public function restore(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can permanently delete.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function forceDelete(User $user): bool
     {
-        return $authUser->can('Restore:User');
+        return $user->can('force_delete_user');
     }
 
-    public function forceDelete(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can permanently bulk delete.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function forceDeleteAny(User $user): bool
     {
-        return $authUser->can('ForceDelete:User');
+        return $user->can('force_delete_any_user');
     }
 
-    public function forceDeleteAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can restore.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function restore(User $user): bool
     {
-        return $authUser->can('ForceDeleteAny:User');
+        return $user->can('{{ Restore }}');
     }
 
-    public function restoreAny(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function restoreAny(User $user): bool
     {
-        return $authUser->can('RestoreAny:User');
+        return $user->can('{{ RestoreAny }}');
     }
 
-    public function replicate(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can bulk restore.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function replicate(User $user): bool
     {
-        return $authUser->can('Replicate:User');
+        return $user->can('{{ Replicate }}');
     }
 
-    public function reorder(AuthUser $authUser): bool
+    /**
+     * Determine whether the user can reorder.
+     *
+     * @param  \App\Models\User  $user
+     * @return bool
+     */
+    public function reorder(User $user): bool
     {
-        return $authUser->can('Reorder:User');
+        return $user->can('{{ Reorder }}');
     }
-
 }

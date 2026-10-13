@@ -2,13 +2,11 @@
 
 namespace App\Filament\Resources;
 
-use BackedEnum;
-use UnitEnum;
 use App\Filament\Resources\ProsesCpmiResource\Pages;
 use App\Filament\Resources\ProsesCpmiResource\RelationManagers;
 use App\Models\ProsesCpmi;
 use Filament\Forms;
-use Filament\Schemas\Schema;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -16,12 +14,13 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 use App\Models\Pendaftaran;
+use Filament\Forms\Components\Card;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
-use Filament\Schemas\Components\Grid;
-use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Tabs;
+use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Tables\Columns\Layout\Split;
@@ -30,26 +29,33 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
+use Malzariey\FilamentDaterangepickerFilter\Filters\DateRangeFilter;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use pxlrbt\FilamentExcel\Exports\ExcelExport;
 use Filament\Tables\Actions\Action;
+use AlperenErsoy\FilamentExport\Actions\FilamentExportBulkAction;
 use App\Filament\Exports\ProsesCpmiExporter;
-use Filament\Schemas\Components\Fieldset;
+use Filament\Forms\Components\Fieldset;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\ImageEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\IconColumn;
 use Carbon\Carbon;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Tables\Actions\ExportAction;
+use IbrahimBougaoua\FilaProgress\Tables\Columns\ProgressBar;
 use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class ProsesCpmiResource extends Resource
 {
     protected static ?string $model = ProsesCpmi::class;
 
-    // protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-arrow-path-rounded-square';
+    // protected static ?string $navigationIcon = 'heroicon-o-arrow-path-rounded-square';
     protected static ?string $navigationLabel = 'PROSES CPMI';
     protected static ?int $navigationSort = -1;
-    protected static string | UnitEnum | null $navigationGroup = 'PROSES';
+    protected static ?string $navigationGroup = 'PROSES';
 
 
     public static function getNavigationBadge(): ?string
@@ -57,9 +63,9 @@ class ProsesCpmiResource extends Resource
         return static::getModel()::count();
     }
 
-    public static function form(Schema $schema): Schema
+    public static function form(Form $form): Form
     {
-        return $schema
+        return $form
             ->schema([
                 Section::make('PENDAFTARAN')
                     ->description('Data Pendaftaran')
@@ -267,17 +273,28 @@ class ProsesCpmiResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('PROGRESS')
+                ProgressBar::make('PROGRESS')
                     ->label('PROGRESS')
                     ->getStateUsing(function ($record) {
+                        // Cek apakah status_id adalah 3
                         if ($record->status_id == 3) {
-                            return '100%';
+                            // Jika status_id adalah 3, langsung kembalikan progres 100%
+                            return [
+                                'total' => 100,
+                                'progress' => 100,
+                            ];
                         }
 
+                        // Cek apakah status_id adalah 1 atau 2
                         if (!in_array($record->status_id, [1, 2])) {
-                            return '0%';
+                            // Jika status_id bukan 1 atau 2, progres tidak dihitung (return null atau 0 progres)
+                            return [
+                                'total' => 0,
+                                'progress' => 0,
+                            ];
                         }
 
+                        // Daftar field tanggal yang ingin diperiksa (semua berupa tanggal)
                         $fields = [
                             'tanggal_pra_bpjs',
                             'tanggal_ujk',
@@ -291,35 +308,46 @@ class ProsesCpmiResource extends Resource
                             'tanggal_penerbangan',
                         ];
 
+                        // Mengakses tanggal_pra_medical dan data_lengkap dari relasi pendaftaran
                         if ($record->pendaftaran) {
-                            $fields[] = 'pendaftaran.tanggal_pra_medical';
-                            $fields[] = 'pendaftaran.data_lengkap';
+                            $fields[] = 'pendaftaran.tanggal_pra_medical';  // Field untuk tanggal_pra_medical
+                            $fields[] = 'pendaftaran.data_lengkap';          // Field boolean untuk data_lengkap
                         }
 
+                        // Menghitung total field
                         $total = count($fields);
 
+                        // Menghitung field yang terisi (tidak null atau boolean true untuk data_lengkap)
                         $filled = collect($fields)
                             ->reduce(function ($count, $field) use ($record) {
+                                // Memeriksa field dari relasi (misalnya pendaftaran.tanggal_pra_medical)
                                 if (str_contains($field, '.')) {
                                     [$relation, $fieldName] = explode('.', $field);
-                                    $value = $record->$relation->$fieldName ?? null;
+                                    $value = $record->$relation->$fieldName;
+                                    // Jika field adalah 'data_lengkap', harus bernilai true
                                     if ($fieldName === 'data_lengkap') {
                                         return $count + ($value === true ? 1 : 0);
                                     }
+                                    // Field tanggal harus tidak null (misalnya tanggal_pra_medical)
                                     return $count + (!is_null($value) ? 1 : 0);
                                 }
+                                // Memeriksa field biasa (tanggal di record) yang tidak boleh null
                                 return $count + (!is_null($record->$field) ? 1 : 0);
                             }, 0);
 
-                        $progress = $total > 0 ? ($filled / $total) * 100 : 0;
-                        return round($progress) . '%';
-                    })
-                    ->badge()
-                    ->color(fn (?string $state): string => match (true) {
-                        (int)$state >= 100 => 'success',
-                        (int)$state >= 50 => 'info',
-                        (int)$state > 0 => 'warning',
-                        default => 'gray',
+                        // Menghitung persentase progress
+                        $progress = ($filled / $total) * 100;
+
+                        // Debugging log untuk membantu memeriksa field yang terisi
+                        logger('Total fields: ' . $total);
+                        logger('Filled fields: ' . $filled);
+                        logger('Progress: ' . $progress);
+
+                        // Mengembalikan total dan progress dalam bentuk persentase
+                        return [
+                            'total' => 100,  // Persentase total
+                            'progress' => $progress,  // Persentase progress
+                        ];
                     }),
                 TextColumn::make('Status.nama')->label('STATUS')
                     ->badge()

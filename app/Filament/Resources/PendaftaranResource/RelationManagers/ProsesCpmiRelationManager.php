@@ -8,25 +8,30 @@ use App\Models\ProsesCpmi;
 use App\Models\User;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Schemas\Components\Wizard;
-use Filament\Schemas\Components\Wizard\Step;
-use Filament\Schemas\Schema;
+use Filament\Forms\Components\Wizard;
+use Filament\Forms\Components\Wizard\Step;
+use Filament\Forms\Form;
 use Filament\Notifications\Actions\Action as NotificationAction;
 use Filament\Notifications\Notification;
 use Filament\Resources\RelationManagers\RelationManager;
+use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Guava\FilamentModalRelationManagers\Concerns\CanBeEmbeddedInModals;
+use IbrahimBougaoua\FilaProgress\Tables\Columns\ProgressBar;
 use Illuminate\Support\Facades\Auth;
 
 class ProsesCpmiRelationManager extends RelationManager
 {
+    use CanBeEmbeddedInModals;
+
     protected static string $relationship = 'ProsesCpmi';
 
     protected static ?string $title = 'PROSES CPMI';
 
-    public function form(Schema $schema): Schema
+    public function form(Form $form): Form
     {
-        return $schema
+        return $form
             ->schema([
                 Wizard::make([
                     Step::make('Informasi Pendaftaran')

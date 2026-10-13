@@ -4,44 +4,27 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Tujuan extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'nama',
-    ];
-
-    public function pendaftarans(): HasMany
+    protected $guarded = [];
+    
+    public function Pendaftaran()
     {
         return $this->hasMany(Pendaftaran::class);
     }
-
-    public function Pendaftaran(): HasMany
-    {
-        return $this->pendaftarans();
-    }
-
-    public function prosesCpmis(): HasMany
+    public function ProsesCpmi()
     {
         return $this->hasMany(ProsesCpmi::class);
     }
-
-    public function ProsesCpmi(): HasMany
-    {
-        return $this->prosesCpmis();
-    }
-
-    public function marketings(): HasMany
+    public function Marketing()
     {
         return $this->hasMany(Marketing::class);
     }
-
-    public function Marketing(): HasMany
+    public function user()
     {
-        return $this->marketings();
+        return $this->belongsTo(User::class);
     }
 }
-

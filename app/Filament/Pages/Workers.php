@@ -19,6 +19,9 @@ use Filament\Tables\Table;
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action as NotificationAction;
 use Illuminate\Support\Facades\Auth;
+use BezhanSalleh\FilamentShield\Traits\HasPageShield;
+use EightyNine\Approvals\Models\ApprovableModel;
+use EightyNine\Approvals\Tables\Columns\ApprovalStatusColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TimePicker;
@@ -26,8 +29,6 @@ use Filament\Tables\Columns\Layout\Panel;
 use Filament\Tables\Columns\Layout\Split;
 use Filament\Tables\Columns\Layout\Stack;
 use Filament\Tables\Enums\ActionsPosition;
-use BackedEnum;
-use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Illuminate\Contracts\View\View;
 
 class Workers extends Page implements HasTable
@@ -44,8 +45,8 @@ class Workers extends Page implements HasTable
     protected static ?string $title = 'Workers';
     protected ?string $heading = 'Workers';
     protected ?string $subheading = 'Workers Listing';
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bars-3-bottom-left';
-    protected string $view = 'filament.pages.workers';
+    protected static ?string $navigationIcon = 'heroicon-o-bars-3-bottom-left';
+    protected static string $view = 'filament.pages.workers';
 
     public function table(Table $table): Table
     {
@@ -117,6 +118,12 @@ class Workers extends Page implements HasTable
             ])
             ->defaultSort('updated_at', 'desc')
             ->actions([
+                ...\EightyNine\Approvals\Tables\Actions\ApprovalActions::make(
+                    TableAction::make("Done")
+                        ->label('Request Interview')
+                        ->hidden(fn(ApprovableModel $record) => $record->shouldBeHidden())
+                        ->color('warning')
+                ),
                 ActionGroup::make([
                     Action::make('Download Pdf')
                         ->label('Biodata For Hongkong')

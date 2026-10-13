@@ -6,11 +6,9 @@ use App\Filament\Resources\PelatihanResource\Pages;
 use App\Filament\Resources\PelatihanResource\RelationManagers;
 use App\Models\Pelatihan;
 use Filament\Forms;
-use BackedEnum;
-use UnitEnum;
+use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\TextInput;
-use Filament\Schemas\Components\Fieldset;
-use Filament\Schemas\Schema;
+use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -23,13 +21,13 @@ class PelatihanResource extends Resource
     protected static ?string $model = Pelatihan::class;
 
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-s-squares-plus';
-    protected static string | UnitEnum | null $navigationGroup = 'Modul';
+    protected static ?string $navigationIcon = 'heroicon-s-squares-plus';
+    protected static ?string $navigationGroup = 'Modul';
     protected static ?string $navigationLabel = 'Pelatihan';
     protected static ?int $navigationSort = -8;
-    public static function form(Schema $schema): Schema
+    public static function form(Form $form): Form
     {
-        return $schema
+        return $form
             ->schema([
                 Fieldset::make('')
                     ->schema([
