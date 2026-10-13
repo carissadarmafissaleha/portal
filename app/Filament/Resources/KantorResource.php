@@ -6,8 +6,10 @@ use App\Filament\Resources\KantorResource\Pages;
 use App\Filament\Resources\KantorResource\RelationManagers;
 use App\Models\Kantor;
 use Filament\Forms;
+use BackedEnum;
+use UnitEnum;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -19,13 +21,13 @@ class KantorResource extends Resource
 {
     protected static ?string $model = Kantor::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-squares-plus';
-    protected static ?string $navigationGroup = 'Modul';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-s-squares-plus';
+    protected static string | UnitEnum | null $navigationGroup = 'Modul';
     protected static ?string $navigationLabel = 'Office';
     protected static ?int $navigationSort = -8;
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 TextInput::make('nama')->required(),
                 TextInput::make('penanggungjawab')

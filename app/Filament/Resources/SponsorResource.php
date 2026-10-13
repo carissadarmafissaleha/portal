@@ -6,8 +6,10 @@ use App\Filament\Resources\SponsorResource\Pages;
 use App\Filament\Resources\SponsorResource\RelationManagers;
 use App\Models\Sponsor;
 use Filament\Forms;
+use BackedEnum;
+use UnitEnum;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -19,13 +21,13 @@ class SponsorResource extends Resource
 {
     protected static ?string $model = Sponsor::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-squares-plus';
-    protected static ?string $navigationGroup = 'Modul';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-s-squares-plus';
+    protected static string | UnitEnum | null $navigationGroup = 'Modul';
     protected static ?string $navigationLabel = 'Sponsor-PL';
     protected static ?int $navigationSort = -8;
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 TextInput::make('nama')->required(),
                 TextInput::make('nomortelp')

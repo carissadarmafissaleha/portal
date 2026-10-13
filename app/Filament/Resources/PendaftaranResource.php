@@ -13,15 +13,17 @@ use App\Models\Regency;
 use App\Models\Sponsor;
 use App\Models\User;
 use App\Models\Village;
+use BackedEnum;
+use UnitEnum;
 use Filament\Actions\Exports\Enums\ExportFormat;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Fieldset;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -31,28 +33,27 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
-use Guava\FilamentModalRelationManagers\Actions\RelationManagerAction;
 use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class PendaftaranResource extends Resource
 {
     protected static ?string $model = Pendaftaran::class;
 
-    // protected static ?string $navigationIcon = 'heroicon-o-clipboard-document-check';
+    // protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-clipboard-document-check';
     protected static ?string $navigationLabel = 'PENDAFTARAN';
 
     protected static ?int $navigationSort = -20;
 
-    protected static ?string $navigationGroup = 'PROSES';
+    protected static string | UnitEnum | null $navigationGroup = 'PROSES';
 
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
     }
 
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Section::make('AKUN CPMI')
                     ->description('Pilih Akun CPMI jika Sudah Registrasi Di Portal')->schema([

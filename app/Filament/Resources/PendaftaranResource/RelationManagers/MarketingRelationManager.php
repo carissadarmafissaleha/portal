@@ -6,28 +6,25 @@ use App\Models\Agency;
 use App\Models\Marketing;
 use App\Models\User;
 use Filament\Actions\Action;
-use Filament\Forms\Components\Fieldset;
-use Filament\Forms\Components\Section;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Guava\FilamentModalRelationManagers\Concerns\CanBeEmbeddedInModals;
 
 class MarketingRelationManager extends RelationManager
 {
-    use CanBeEmbeddedInModals;
-
     protected static string $relationship = 'Marketing';
 
     protected static ?string $title = 'MARKETING / BIODATA';
 
-    public function form(Form $form): Form
+    public function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 // Section::make('AKUN CPMI')
                 //     ->description('Pilih Akun CPMI jika Sudah Registrasi Di Portal')->schema([

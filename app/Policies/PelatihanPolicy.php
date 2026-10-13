@@ -1,108 +1,75 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
-use App\Models\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\Pelatihan;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class PelatihanPolicy
 {
     use HandlesAuthorization;
-
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    
+    public function viewAny(AuthUser $authUser): bool
     {
-        return $user->can('view_any_pelatihan');
+        return $authUser->can('ViewAny:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Pelatihan $pelatihan): bool
+    public function view(AuthUser $authUser, Pelatihan $pelatihan): bool
     {
-        return $user->can('view_pelatihan');
+        return $authUser->can('View:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(AuthUser $authUser): bool
     {
-        return $user->can('create_pelatihan');
+        return $authUser->can('Create:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Pelatihan $pelatihan): bool
+    public function update(AuthUser $authUser, Pelatihan $pelatihan): bool
     {
-        return $user->can('update_pelatihan');
+        return $authUser->can('Update:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Pelatihan $pelatihan): bool
+    public function delete(AuthUser $authUser, Pelatihan $pelatihan): bool
     {
-        return $user->can('delete_pelatihan');
+        return $authUser->can('Delete:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can bulk delete.
-     */
-    public function deleteAny(User $user): bool
+    public function deleteAny(AuthUser $authUser): bool
     {
-        return $user->can('delete_any_pelatihan');
+        return $authUser->can('DeleteAny:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can permanently delete.
-     */
-    public function forceDelete(User $user, Pelatihan $pelatihan): bool
+    public function restore(AuthUser $authUser, Pelatihan $pelatihan): bool
     {
-        return $user->can('force_delete_pelatihan');
+        return $authUser->can('Restore:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can permanently bulk delete.
-     */
-    public function forceDeleteAny(User $user): bool
+    public function forceDelete(AuthUser $authUser, Pelatihan $pelatihan): bool
     {
-        return $user->can('force_delete_any_pelatihan');
+        return $authUser->can('ForceDelete:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can restore.
-     */
-    public function restore(User $user, Pelatihan $pelatihan): bool
+    public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $user->can('{{ Restore }}');
+        return $authUser->can('ForceDeleteAny:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can bulk restore.
-     */
-    public function restoreAny(User $user): bool
+    public function restoreAny(AuthUser $authUser): bool
     {
-        return $user->can('{{ RestoreAny }}');
+        return $authUser->can('RestoreAny:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can replicate.
-     */
-    public function replicate(User $user, Pelatihan $pelatihan): bool
+    public function replicate(AuthUser $authUser, Pelatihan $pelatihan): bool
     {
-        return $user->can('{{ Replicate }}');
+        return $authUser->can('Replicate:Pelatihan');
     }
 
-    /**
-     * Determine whether the user can reorder.
-     */
-    public function reorder(User $user): bool
+    public function reorder(AuthUser $authUser): bool
     {
-        return $user->can('{{ Reorder }}');
+        return $authUser->can('Reorder:Pelatihan');
     }
+
 }

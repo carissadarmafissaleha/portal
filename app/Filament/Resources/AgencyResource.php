@@ -6,9 +6,11 @@ use App\Filament\Resources\AgencyResource\Pages;
 use App\Filament\Resources\AgencyResource\RelationManagers;
 use App\Models\Agency;
 use Filament\Forms;
-use Filament\Forms\Components\Fieldset;
+use BackedEnum;
+use UnitEnum;
+use Filament\Schemas\Components\Fieldset;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Form;
+use Filament\Schemas\Schema;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -20,13 +22,13 @@ class AgencyResource extends Resource
 {
     protected static ?string $model = Agency::class;
 
-    protected static ?string $navigationIcon = 'heroicon-s-squares-plus';
-    protected static ?string $navigationGroup = 'Modul';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-s-squares-plus';
+    protected static string | UnitEnum | null $navigationGroup = 'Modul';
     protected static ?string $navigationLabel = 'Agency';
     protected static ?int $navigationSort = -8;
-    public static function form(Form $form): Form
+    public static function form(Schema $schema): Schema
     {
-        return $form
+        return $schema
             ->schema([
                 Fieldset::make('')
                     ->schema([

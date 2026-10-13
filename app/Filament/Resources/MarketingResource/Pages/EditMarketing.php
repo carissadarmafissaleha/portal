@@ -5,8 +5,6 @@ namespace App\Filament\Resources\MarketingResource\Pages;
 use App\Filament\Resources\MarketingResource;
 use App\Models\Marketing;
 use App\Models\User;
-use EightyNine\Approvals\Models\ApprovableModel;
-use EightyNine\Approvals\Traits\HasApprovalHeaderActions; // Trait untuk Approval Header
 use Filament\Resources\Pages\EditRecord;
 use Filament\Notifications\Notification;
 use Filament\Notifications\Actions\Action as NotificationAction;
@@ -14,8 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class EditMarketing extends EditRecord
 {
-    use HasApprovalHeaderActions; // Gunakan trait ini untuk menambahkan tombol approval di header
-
     protected static string $resource = MarketingResource::class;
     protected static ?string $title = 'EDIT BIODATA';
 
@@ -73,12 +69,6 @@ class EditMarketing extends EditRecord
     }
 
 
-    protected function getOnCompletionAction(): \Filament\Actions\Action
-    {
-        return \Filament\Actions\Action::make("Done")
-            ->color("success")
-            ->hidden(fn(ApprovableModel $record) => $record->shouldBeHidden());
-    }
     protected function getRedirectUrl(): string
     {
         $record = $this->record;

@@ -2,29 +2,27 @@
 
 namespace App\Filament\Pages;
 
+use BackedEnum;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Contracts\HasInfolists;
 use Filament\Pages\Page;
-use Filament\Infolists\Infolist;
+use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth; // Import Auth facade
 use App\Models\Pendaftaran; // Import model Pendaftaran
 use App\Models\Marketing; // Import model Marketing
 use App\Models\ProsesCpmi;
 use Filament\Actions\Action;
 use Filament\Actions\ActionGroup;
-use Filament\Infolists\Components\Actions\Action as ActionsAction;
-use Filament\Infolists\Components\Fieldset;
-use Filament\Infolists\Components\Grid;
-use Filament\Infolists\Components\Group;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Group;
 use Filament\Infolists\Components\ImageEntry;
-use Filament\Infolists\Components\Section;
-use IbrahimBougaoua\FilaProgress\Infolists\Components\ProgressBarEntry;
+use Filament\Schemas\Components\Section;
 use Illuminate\Contracts\View\View;
 
-class Proses extends Page implements HasInfolists
+class Proses extends Page
 {
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
-    protected static string $view = 'filament.pages.proses';
+    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-document-text';
+    protected string $view = 'filament.pages.proses';
 
     protected static ?string $navigationLabel = 'DETAILS';
     protected static ?string $title = 'DETAILS';
@@ -45,7 +43,7 @@ class Proses extends Page implements HasInfolists
     // }
 
 
-    public function infolist(Infolist $infolist): Infolist
+    public function infolist(Schema $schema): Schema
     {
         // Ambil pengguna yang sedang login
         $user = Auth::user();
@@ -66,7 +64,7 @@ class Proses extends Page implements HasInfolists
         }
 
 
-        return $infolist
+        return $schema
             ->record($user) // Mengatur record ke pengguna yang sedang login
             ->schema([
                 Grid::make([
@@ -186,7 +184,7 @@ class Proses extends Page implements HasInfolists
                         TextEntry::make('file_ktp')->label('Upload KTP')
                             ->default(optional($pendaftaran)->file_ktp ?? 'Tidak ada data')
                             ->suffixAction(
-                                ActionsAction::make('downloadKtpWali')
+                                Action::make('downloadKtpWali')
                                     ->icon('heroicon-o-cloud-arrow-down')  // Add a download icon for visual clarity
                                     ->url(fn() => optional($pendaftaran)->file_ktp ? asset('storage/' . $pendaftaran->file_ktp) : '#')  // Generate download URL from Pendaftaran's file
                                     ->openUrlInNewTab()  // Open the download in a new tab
@@ -197,7 +195,7 @@ class Proses extends Page implements HasInfolists
                             ->label('Upload KTP Wali')
                             ->default(optional($pendaftaran)->file_ktp_wali ?? 'Tidak ada data')
                             ->suffixAction(
-                                ActionsAction::make('downloadKtpWali')
+                                Action::make('downloadKtpWali')
                                     ->icon('heroicon-o-cloud-arrow-down')
                                     ->url(fn() => optional($pendaftaran)->file_ktp_wali ? asset('storage/' . $pendaftaran->file_ktp_wali) : '#')
                                     ->openUrlInNewTab()
@@ -207,7 +205,7 @@ class Proses extends Page implements HasInfolists
                         TextEntry::make('file_kk')->label('Upload KK')
                             ->default(optional($pendaftaran)->file_kk ?? 'Tidak ada data')
                             ->suffixAction(
-                                ActionsAction::make('downloadKtpWali')
+                                Action::make('downloadKtpWali')
                                     ->icon('heroicon-o-cloud-arrow-down')
                                     ->url(fn() => optional($pendaftaran)->file_kk ? asset('storage/' . $pendaftaran->file_kk) : '#')
                                     ->openUrlInNewTab()
@@ -217,7 +215,7 @@ class Proses extends Page implements HasInfolists
                         TextEntry::make('file_akta_lahir')->label('Upload Akta Lahir')
                             ->default(optional($pendaftaran)->file_akta_lahir ?? 'Tidak ada data')
                             ->suffixAction(
-                                ActionsAction::make('downloadKtpWali')
+                                Action::make('downloadKtpWali')
                                     ->icon('heroicon-o-cloud-arrow-down')
                                     ->url(fn() => optional($pendaftaran)->file_akta_lahir ? asset('storage/' . $pendaftaran->file_akta_lahir) : '#')
                                     ->openUrlInNewTab()
@@ -227,7 +225,7 @@ class Proses extends Page implements HasInfolists
                         TextEntry::make('file_surat_nikah')->label('Upload Surat Nikah')
                             ->default(optional($pendaftaran)->file_surat_nikah ?? 'Tidak ada data')
                             ->suffixAction(
-                                ActionsAction::make('downloadKtpWali')
+                                Action::make('downloadKtpWali')
                                     ->icon('heroicon-o-cloud-arrow-down')
                                     ->url(fn() => optional($pendaftaran)->file_surat_nikah ? asset('storage/' . $pendaftaran->file_surat_nikah) : '#')
                                     ->openUrlInNewTab()
@@ -237,7 +235,7 @@ class Proses extends Page implements HasInfolists
                         TextEntry::make('file_surat_ijin')->label('Upload Surat Ijin')
                             ->default(optional($pendaftaran)->file_surat_ijin ?? 'Tidak ada data')
                             ->suffixAction(
-                                ActionsAction::make('downloadKtpWali')
+                                Action::make('downloadKtpWali')
                                     ->icon('heroicon-o-cloud-arrow-down')
                                     ->url(fn() => optional($pendaftaran)->file_surat_ijin ? asset('storage/' . $pendaftaran->file_surat_ijin) : '#')
                                     ->openUrlInNewTab()
@@ -247,7 +245,7 @@ class Proses extends Page implements HasInfolists
                         TextEntry::make('file_ijazah')->label('Upload Ijazah')
                             ->default(optional($pendaftaran)->file_ijazah ?? 'Tidak ada data')
                             ->suffixAction(
-                                ActionsAction::make('downloadKtpWali')
+                                Action::make('downloadKtpWali')
                                     ->icon('heroicon-o-cloud-arrow-down')
                                     ->url(fn() => optional($pendaftaran)->file_ijazah ? asset('storage/' . $pendaftaran->file_ijazah) : '#')
                                     ->openUrlInNewTab()
@@ -257,7 +255,7 @@ class Proses extends Page implements HasInfolists
                         TextEntry::make('file_tambahan')->label('Upload File Tambahan')
                             ->default(optional($pendaftaran)->file_tambahan ?? 'Tidak ada data')
                             ->suffixAction(
-                                ActionsAction::make('downloadKtpWali')
+                                Action::make('downloadKtpWali')
                                     ->icon('heroicon-o-cloud-arrow-down')
                                     ->url(fn() => optional($pendaftaran)->file_tambahan ? asset('storage/' . $pendaftaran->file_tambahan) : '#')
                                     ->openUrlInNewTab()

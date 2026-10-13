@@ -1,108 +1,75 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
-use App\Models\User;
+use Illuminate\Foundation\Auth\User as AuthUser;
 use App\Models\Kantor;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class KantorPolicy
 {
     use HandlesAuthorization;
-
-    /**
-     * Determine whether the user can view any models.
-     */
-    public function viewAny(User $user): bool
+    
+    public function viewAny(AuthUser $authUser): bool
     {
-        return $user->can('view_any_kantor');
+        return $authUser->can('ViewAny:Kantor');
     }
 
-    /**
-     * Determine whether the user can view the model.
-     */
-    public function view(User $user, Kantor $kantor): bool
+    public function view(AuthUser $authUser, Kantor $kantor): bool
     {
-        return $user->can('view_kantor');
+        return $authUser->can('View:Kantor');
     }
 
-    /**
-     * Determine whether the user can create models.
-     */
-    public function create(User $user): bool
+    public function create(AuthUser $authUser): bool
     {
-        return $user->can('create_kantor');
+        return $authUser->can('Create:Kantor');
     }
 
-    /**
-     * Determine whether the user can update the model.
-     */
-    public function update(User $user, Kantor $kantor): bool
+    public function update(AuthUser $authUser, Kantor $kantor): bool
     {
-        return $user->can('update_kantor');
+        return $authUser->can('Update:Kantor');
     }
 
-    /**
-     * Determine whether the user can delete the model.
-     */
-    public function delete(User $user, Kantor $kantor): bool
+    public function delete(AuthUser $authUser, Kantor $kantor): bool
     {
-        return $user->can('delete_kantor');
+        return $authUser->can('Delete:Kantor');
     }
 
-    /**
-     * Determine whether the user can bulk delete.
-     */
-    public function deleteAny(User $user): bool
+    public function deleteAny(AuthUser $authUser): bool
     {
-        return $user->can('delete_any_kantor');
+        return $authUser->can('DeleteAny:Kantor');
     }
 
-    /**
-     * Determine whether the user can permanently delete.
-     */
-    public function forceDelete(User $user, Kantor $kantor): bool
+    public function restore(AuthUser $authUser, Kantor $kantor): bool
     {
-        return $user->can('force_delete_kantor');
+        return $authUser->can('Restore:Kantor');
     }
 
-    /**
-     * Determine whether the user can permanently bulk delete.
-     */
-    public function forceDeleteAny(User $user): bool
+    public function forceDelete(AuthUser $authUser, Kantor $kantor): bool
     {
-        return $user->can('force_delete_any_kantor');
+        return $authUser->can('ForceDelete:Kantor');
     }
 
-    /**
-     * Determine whether the user can restore.
-     */
-    public function restore(User $user, Kantor $kantor): bool
+    public function forceDeleteAny(AuthUser $authUser): bool
     {
-        return $user->can('{{ Restore }}');
+        return $authUser->can('ForceDeleteAny:Kantor');
     }
 
-    /**
-     * Determine whether the user can bulk restore.
-     */
-    public function restoreAny(User $user): bool
+    public function restoreAny(AuthUser $authUser): bool
     {
-        return $user->can('{{ RestoreAny }}');
+        return $authUser->can('RestoreAny:Kantor');
     }
 
-    /**
-     * Determine whether the user can replicate.
-     */
-    public function replicate(User $user, Kantor $kantor): bool
+    public function replicate(AuthUser $authUser, Kantor $kantor): bool
     {
-        return $user->can('{{ Replicate }}');
+        return $authUser->can('Replicate:Kantor');
     }
 
-    /**
-     * Determine whether the user can reorder.
-     */
-    public function reorder(User $user): bool
+    public function reorder(AuthUser $authUser): bool
     {
-        return $user->can('{{ Reorder }}');
+        return $authUser->can('Reorder:Kantor');
     }
+
 }

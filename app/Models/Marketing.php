@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use EightyNine\Approvals\Models\ApprovableModel;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Marketing extends ApprovableModel
+class Marketing extends Model
 {
     use HasFactory, SoftDeletes;
 

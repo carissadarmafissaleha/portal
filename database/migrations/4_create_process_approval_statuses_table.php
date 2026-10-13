@@ -3,8 +3,6 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use RingleSoft\LaravelProcessApproval\Enums\ApprovalStatusEnum;
-
 return new class extends Migration
 {
     /**
@@ -16,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->morphs('approvable');
             $table->json('steps')->nullable();
-            $table->string('status', 10)->default(ApprovalStatusEnum::CREATED->value);
+            $table->string('status', 10)->default('Created');
             $table->foreignId('creator_id')->nullable();
             $table->timestamps();
         });
