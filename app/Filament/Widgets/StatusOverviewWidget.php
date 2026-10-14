@@ -11,22 +11,8 @@ class StatusOverviewWidget extends BaseWidget
 {
     use InteractsWithPageFilters;
 
-    // Fungsi untuk menghasilkan data acak untuk chart kecil
-    public function generateRandomChartData($count)
-    {
-        $data = [];
-        $startTime = strtotime('00:00'); // Mulai dari jam 00:00
-
-        for ($i = 0; $i < $count; $i++) {
-            $hour = date('H:00', strtotime("+{$i} hours", $startTime)); // Mengatur format jam
-            $randomValue = rand(5, 96); // Menghasilkan angka acak antara 5 dan 96
-            $data[] = $randomValue; // Hanya mengambil nilai acak untuk chart
-        }
-
-        return $data;
-    }
-
-    // protected int | string | array $columnSpan = 2;
+    protected static ?int $sort = 1;
+    protected int | string | array $columnSpan = 'full';
 
     protected function getStats(): array
     {
@@ -35,140 +21,106 @@ class StatusOverviewWidget extends BaseWidget
         $end = $this->filters['endDate'] ?? null;
         $kantor = $this->filters['kantor'] ?? null;
 
+        $baruCount = ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
+            ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
+            ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
+                $query->where('kantor_id', $kantor);
+            }))
+            ->where('status_id', 1)
+            ->count();
+
+        $prosesCount = ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
+            ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
+            ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
+                $query->where('kantor_id', $kantor);
+            }))
+            ->where('status_id', 2)
+            ->count();
+
+        $terbangCount = ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
+            ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
+            ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
+                $query->where('kantor_id', $kantor);
+            }))
+            ->where('status_id', 3)
+            ->count();
+
+        $pendingCount = ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
+            ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
+            ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
+                $query->where('kantor_id', $kantor);
+            }))
+            ->where('status_id', 4)
+            ->count();
+
+        $unfitCount = ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
+            ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
+            ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
+                $query->where('kantor_id', $kantor);
+            }))
+            ->where('status_id', 5)
+            ->count();
+
+        $mdCount = ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
+            ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
+            ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
+                $query->where('kantor_id', $kantor);
+            }))
+            ->where('status_id', 6)
+            ->count();
+
+        $totalActive = max(1, $baruCount + $prosesCount + $terbangCount + $pendingCount + $unfitCount + $mdCount);
+
         return [
-            AdvancedStatsOverviewWidgetStat::make(
-                'BARU',
-                ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
-                    ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
-                    ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
-                        $query->where('kantor_id', $kantor);
-                    }))
-                    ->where('status_id', 1)
-                    ->count()
-            )
+            AdvancedStatsOverviewWidgetStat::make('BARU', $baruCount)
                 ->description('Total CPMI Baru')
-                ->descriptionIcon('heroicon-o-chevron-down', 'before')
-                ->icon('heroicon-o-bell')
-//                ->iconColor('primary')
-//                ->chartColor('primary')
-//                ->progressBarColor('primary')
-                ->progress(100)
-                // ->chart($this->generateRandomChartData(9))
+                ->icon('heroicon-o-user-plus')
+                ->progress(round(($baruCount / $totalActive) * 100))
                 ->extraAttributes([
                     'class' => 'cursor-pointer',
                     'onclick' => "window.open('/admin/proses-cpmis?tableFilters[Status][values][0]=1')",
                 ]),
 
-            AdvancedStatsOverviewWidgetStat::make(
-                'PROSES',
-                ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
-                    ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
-                    ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
-                        $query->where('kantor_id', $kantor);
-                    }))
-                    ->where('status_id', 2)
-                    ->count()
-            )
+            AdvancedStatsOverviewWidgetStat::make('PROSES', $prosesCount)
                 ->description('Total CPMI On Proses')
-                ->descriptionIcon('heroicon-o-chevron-down', 'before')
-                ->icon('heroicon-o-arrow-path-rounded-square')
-//                ->iconColor('primary')
-//                ->chartColor('primary')
-                ->progress(100)
-//                ->progressBarColor('primary')
-                // ->chart($this->generateRandomChartData(9))
+                ->icon('heroicon-o-arrow-path')
+                ->progress(round(($prosesCount / $totalActive) * 100))
                 ->extraAttributes([
                     'class' => 'cursor-pointer',
                     'onclick' => "window.open('/admin/proses-cpmis?tableFilters[Status][values][0]=2')",
                 ]),
 
-            AdvancedStatsOverviewWidgetStat::make(
-                'TERBANG',
-                ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
-                    ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
-                    ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
-                        $query->where('kantor_id', $kantor);
-                    }))
-                    ->where('status_id', 3)
-                    ->count()
-            )
+            AdvancedStatsOverviewWidgetStat::make('TERBANG', $terbangCount)
                 ->description('Total CPMI Terbang')
-                ->descriptionIcon('heroicon-o-chevron-down', 'before')
                 ->icon('heroicon-o-paper-airplane')
-//                ->iconColor('primary')
-//                ->chartColor('primary')
-                ->progress(100)
-//                ->progressBarColor('primary')
-                // ->chart($this->generateRandomChartData(9))
+                ->progress(round(($terbangCount / $totalActive) * 100))
                 ->extraAttributes([
                     'class' => 'cursor-pointer',
                     'onclick' => "window.open('/admin/proses-cpmis?tableFilters[Status][values][0]=3')",
                 ]),
 
-            AdvancedStatsOverviewWidgetStat::make(
-                'PENDING',
-                ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
-                    ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
-                    ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
-                        $query->where('kantor_id', $kantor);
-                    }))
-                    ->where('status_id', 4)
-                    ->count()
-            )
+            AdvancedStatsOverviewWidgetStat::make('PENDING', $pendingCount)
                 ->description('Total CPMI Pending')
-                ->descriptionIcon('heroicon-o-chevron-down', 'before')
                 ->icon('heroicon-o-clock')
-//                ->iconColor('primary')
-//                ->chartColor('primary')
-                ->progress(100)
-//                ->progressBarColor('warning')
-                // ->chart($this->generateRandomChartData(9))
+                ->progress(round(($pendingCount / $totalActive) * 100))
                 ->extraAttributes([
                     'class' => 'cursor-pointer',
                     'onclick' => "window.open('/admin/proses-cpmis?tableFilters[Status][values][0]=4')",
                 ]),
 
-            AdvancedStatsOverviewWidgetStat::make(
-                'UNFIT',
-                ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
-                    ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
-                    ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
-                        $query->where('kantor_id', $kantor);
-                    }))
-                    ->where('status_id', 5)
-                    ->count()
-            )
+            AdvancedStatsOverviewWidgetStat::make('UNFIT', $unfitCount)
                 ->description('Total CPMI UNFIT')
-                ->descriptionIcon('heroicon-o-chevron-down', 'before')
                 ->icon('heroicon-o-beaker')
-//                ->iconColor('primary')
-//                ->chartColor('primary')
-                ->progress(100)
-//                ->progressBarColor('warning')
-                // ->chart($this->generateRandomChartData(9))
+                ->progress(round(($unfitCount / $totalActive) * 100))
                 ->extraAttributes([
                     'class' => 'cursor-pointer',
                     'onclick' => "window.open('/admin/proses-cpmis?tableFilters[Status][values][0]=5')",
                 ]),
 
-            AdvancedStatsOverviewWidgetStat::make(
-                'MD',
-                ProsesCpmi::when($start, fn ($query) => $query->whereDate('created_at', '>=', $start))
-                    ->when($end, fn ($query) => $query->whereDate('created_at', '<=', $end))
-                    ->when($kantor, fn ($query) => $query->whereHas('pendaftaran', function ($query) use ($kantor) {
-                        $query->where('kantor_id', $kantor);
-                    }))
-                    ->where('status_id', 6)
-                    ->count()
-            )
+            AdvancedStatsOverviewWidgetStat::make('MD', $mdCount)
                 ->description('Total CPMI Mengundurkan Diri')
-                ->descriptionIcon('heroicon-o-chevron-down', 'before')
-                ->icon('heroicon-o-x-circle')
-//                ->iconColor('primary')
-//                ->chartColor('primary')
-                ->progress(100)
-//                ->progressBarColor('danger')
-                // ->chart($this->generateRandomChartData(9))
+                ->icon('heroicon-o-user-minus')
+                ->progress(round(($mdCount / $totalActive) * 100))
                 ->extraAttributes([
                     'class' => 'cursor-pointer',
                     'onclick' => "window.open('/admin/proses-cpmis?tableFilters[Status][values][0]=6')",

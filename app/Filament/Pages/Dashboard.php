@@ -2,9 +2,9 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Kantor; // Pastikan untuk mengimport model Kantor
+use App\Models\Kantor;
 use Filament\Forms\Components\DatePicker;
-use Filament\Forms\Components\Fieldset;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
@@ -12,7 +12,6 @@ use Illuminate\Contracts\View\View;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
 use Filament\Actions\Action;
 use Filament\Support\Enums\Alignment;
-
 
 class Dashboard extends \Filament\Pages\Dashboard
 {
@@ -26,6 +25,11 @@ class Dashboard extends \Filament\Pages\Dashboard
     protected static ?string $title = 'RINGKASAN';
     protected static ?string $navigationIcon = 'heroicon-o-presentation-chart-line';
 
+    public function getSubheading(): ?string
+    {
+        return 'Ringkasan operasional penempatan, status CPMI terkini, dan analisis performa.';
+    }
+
     use HasFiltersForm;
 
     public ?string $startDate = null;
@@ -35,64 +39,70 @@ class Dashboard extends \Filament\Pages\Dashboard
     protected function getHeaderActions(): array
     {
         return [
-
             Action::make('downloadPdf')
                 ->label('Unduh Laporan')
-                ->icon('heroicon-o-printer')
-                ->modalHeading('Pilih Periode Laporan')
-                ->modalDescription('Silahkan Pilih Rentang Waktu yang Anda Inginkan')
-                ->modalSubmitActionLabel('Unduh Laporan')
-                ->modalIcon('heroicon-o-printer')
-
+                ->icon('heroicon-o-arrow-down-tray')
+                ->modalHeading('Ekspor Laporan Periodik')
+                ->modalDescription('Silahkan pilih rentang tanggal yang ingin diunduh dalam format PDF.')
+                ->modalSubmitActionLabel('Unduh PDF')
+                ->modalIcon('heroicon-o-arrow-down-tray')
                 ->modalWidth('md')
                 ->form([
                     DatePicker::make('startDate')
-                        ->label('Tanggal Mulai'),
+                        ->label('Tanggal Mulai')
+                        ->prefixIcon('heroicon-o-calendar')
+                        ->native(false)
+                        ->required(),
                     DatePicker::make('endDate')
-                        ->label('Tanggal Akhir'),
+                        ->label('Tanggal Akhir')
+                        ->prefixIcon('heroicon-o-calendar')
+                        ->native(false)
+                        ->required(),
                 ])
                 ->action(function (array $data) {
-                    // Redirect ke halaman unduh PDF dengan tanggal dari form modal
                     $this->redirectRoute('laporan.pdf.download', [
                         'startDate' => $data['startDate'],
                         'endDate' => $data['endDate'],
-                        'kantor' => request('kantor'), // Jika ada kantor yang dipilih di halaman
+                        'kantor' => request('kantor'),
                     ]);
                 })
-                ->color('primary')
+                ->color('gray')
                 ->modalAlignment(Alignment::Center),
-            // ->slideOver(),
-
-            // Notification::make()
-            // ->title('Unduh Laporan')
         ];
     }
+
     public function filtersForm(Form $form): Form
     {
         return $form
             ->schema([
-                Fieldset::make('FILTER')
+                Section::make('Filter Periode & Cabang')
+                    ->description('Saring ringkasan statistik dan grafik analitik berdasarkan rentang tanggal dan kantor.')
+                    ->icon('heroicon-o-funnel')
+                    ->collapsible()
+                    ->compact()
                     ->schema([
                         DatePicker::make('startDate')
-                            ->prefixIcon('heroicon-m-check-circle')
-//                            ->prefixIconColor('primary')
-                            ->prefix('MULAI')
-                            ->label('')
-                            ->required(),
+                            ->label('Tanggal Mulai')
+                            ->placeholder('Pilih tanggal awal')
+                            ->prefixIcon('heroicon-o-calendar')
+                            ->native(false),
                         DatePicker::make('endDate')
-                            ->prefixIcon('heroicon-m-check-circle')
-//                            ->prefixIconColor('primary')
-                            ->prefix('SAMPAI')
-                            ->label('')
-                            ->required(),
+                            ->label('Tanggal Akhir')
+                            ->placeholder('Pilih tanggal akhir')
+                            ->prefixIcon('heroicon-o-calendar')
+                            ->native(false),
                         Select::make('kantor')
+                            ->label('Kantor Cabang')
+                            ->placeholder('Semua Kantor Cabang')
+                            ->prefixIcon('heroicon-o-building-office-2')
                             ->options(Kantor::all()->pluck('nama', 'id'))
-                            ->label('')
-                            ->prefixIcon('heroicon-m-check-circle')
-//                            ->prefixIconColor('primary')
-                            ->prefix('PILIH')
-                            ->placeholder('SEMUA KANTOR'),
-                    ])->columns(3),
+                            ->searchable(),
+                    ])
+                    ->columns([
+                        'default' => 1,
+                        'sm' => 2,
+                        'lg' => 3,
+                    ]),
             ]);
     }
 

@@ -35,11 +35,10 @@ Route::post('/logout', function () {
     return redirect('/');
 })->name('logout');
 
-//---------------------------------------------------------------- Foto Biodata
-Route::get('/biodata/foto/{filename}', 'HongkongController@showPhoto')->name('biodata.photo');
-Route::get('/biodata/foto/{filename}', 'TaiwanController@showPhoto')->name('biodata.photo');
-Route::get('/biodata/foto/{filename}', 'SingaporeController@showPhoto')->name('biodata.photo');
-Route::get('/biodata/foto/{filename}', 'MalaysiaController@showPhoto')->name('biodata.photo');
+Route::get('/biodata/foto/{filename}', [HongkongController::class, 'showPhoto'])->name('biodata.photo.hongkong');
+Route::get('/biodata/taiwan/foto/{filename}', [TaiwanController::class, 'showPhoto'])->name('biodata.photo.taiwan');
+Route::get('/biodata/singapore/foto/{filename}', [SingaporeController::class, 'showPhoto'])->name('biodata.photo.singapore');
+Route::get('/biodata/malaysia/foto/{filename}', [MalaysiaController::class, 'showPhoto'])->name('biodata.photo.malaysia');
 //---------------------------------------------------------------- Biodata
 Route::get('/hongkong/{id}/pdf/download', [HongkongController::class, 'download'])
     ->name('hongkong.pdf.download')
