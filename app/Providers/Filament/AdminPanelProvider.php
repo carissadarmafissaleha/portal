@@ -53,7 +53,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->profile(EditProfile::class)
             ->font('Plus Jakarta Sans')
-            ->defaultThemeMode(ThemeMode::Light)
+            ->defaultThemeMode(ThemeMode::Dark)
             ->registration()
             ->passwordReset()
             ->emailVerification()
@@ -64,11 +64,11 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->databaseNotifications()
             ->databaseNotificationsPolling('3s')
-            ->brandLogo(asset('images/icon.png'))
-            ->darkModeBrandLogo(asset('images/icon.png'))
-            ->brandLogoHeight('3rem')
+            // ->brandLogo(asset('images/icon.png'))
+            // ->darkModeBrandLogo(asset('images/icon.png'))
+            // ->brandLogoHeight('3rem')
             ->favicon(asset('images/icon.png'))
-            ->breadcrumbs(false)
+            ->breadcrumbs(true)
             ->colors([
                 'primary' => Color::Slate,
                 'gray' => Color::Zinc,
