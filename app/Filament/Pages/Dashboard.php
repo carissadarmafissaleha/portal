@@ -27,7 +27,7 @@ class Dashboard extends \Filament\Pages\Dashboard
 
     public function getSubheading(): ?string
     {
-        return 'Ringkasan operasional penempatan, status CPMI terkini, dan analisis performa.';
+        return 'Ringkasan Operasional Penempatan, Status CPMI Terkini, Dan Analisis Performa.';
     }
 
     use HasFiltersForm;
@@ -76,7 +76,7 @@ class Dashboard extends \Filament\Pages\Dashboard
         return $form
             ->schema([
                 Section::make('Filter Periode & Cabang')
-                    ->description('Saring ringkasan statistik dan grafik analitik berdasarkan rentang tanggal dan kantor.')
+                    ->description('Saring Ringkasan Statistik Dan Grafik Analitik Berdasarkan Rentang Tanggal Dan Kantor.')
                     ->icon('heroicon-o-funnel')
                     ->collapsible()
                     ->compact()

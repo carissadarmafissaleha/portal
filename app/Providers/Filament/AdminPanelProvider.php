@@ -52,7 +52,7 @@ class AdminPanelProvider extends PanelProvider
     {
         return $panel
             ->profile(EditProfile::class)
-            ->font('Plus Jakarta Sans')
+            ->font('JetBrains Mono')
             ->defaultThemeMode(ThemeMode::Dark)
             ->registration()
             ->passwordReset()
@@ -111,8 +111,8 @@ class AdminPanelProvider extends PanelProvider
                 ThemesPlugin::make()
                     ->canViewThemesPage(fn () => auth()->user()?->hasRole('super_admin') ?? false),
                 //-----------------------------------User Bukan Error------------
-                LightSwitchPlugin::make()
-                    ->position(Alignment::TopCenter),
+                // LightSwitchPlugin::make()
+                //     ->position(Alignment::TopCenter),
                 // FilamentBackgroundsPlugin::make()
                 //     ->imageProvider(
                 //         MyImages::make()
